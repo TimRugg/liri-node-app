@@ -2,13 +2,10 @@ require('dotenv').config();
 var keys = require('./keys.js');
 var request = require('request');
 var Twitter = require('twitter');
+var Spotify = require('node-spotify-api');
 var fs = require("fs");
 
-// var Spotify = require('node-spotify-api');
-// var spotify = new Spotify(keys.spotify);
-
 var inputString = process.argv;
-
 navigateToLIRI(inputString[2]);
 
 function navigateToLIRI(action) {
@@ -51,6 +48,13 @@ function getTweets(){
 }
 
 function getSong() {
+    var spotify = new Spotify(keys.spotify); // using keys.js sends the two spotify keys to create a Spotify object
+
+    console.log("Artist(s): " + artist);
+    console.log("Song: " + song);
+    console.log("Preview: " + preview);
+    console.log("Album: " + album);
+
 // need to get keys and figure out api
     console.log("spotify-this-song");
 }
@@ -61,15 +65,19 @@ function lookupValue() {
     for (i = 3; i < inputString.length; i++) {
         lookup += inputString[i] + " "; 
     }
-    return lookup.trim(); // remove trailing space   
+    if (lookup == "") {
+        return "ErrNoLookup";
+    } else {
+        return lookup.trim(); // remove trailing space
+    }   
 }
 
 function getMovie() {
     // if no movie title was input, use Mr. Nobody
-    if (inputString.length != 3) {
-        lookupMovieValue = lookupValue();
+    if (lookkupValue()=="ErrNoLookup") {
+        lookupMovieValue = "Mr. Nobody";   
     } else { 
-        lookupMovieValue = "Mr. Nobody";
+        lookupMovieValue = lookupValue();
     }
     // pull back movie information
     var lookupMovie = "http://www.omdbapi.com/?t=" + lookupMovieValue + "&y=&plot=short&apikey=trilogy";
