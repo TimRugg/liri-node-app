@@ -48,15 +48,39 @@ function getTweets(){
 }
 
 function getSong() {
+console.log("spotify-this-song");
+    // if no song title was input, use The Sign else parse input together if without quotes
+    var lookupSongValue = "";
+    if (lookupValue()=="ErrNoLookup") {
+        lookupSongValue = "The Sign";   
+    } else { 
+        lookupSongValue = lookupValue();
+    };
+    // pull back and output song information
     var spotify = new Spotify(keys.spotify); // using keys.js sends the two spotify keys to create a Spotify object
-
-    console.log("Artist(s): " + artist);
-    console.log("Song: " + song);
-    console.log("Preview: " + preview);
-    console.log("Album: " + album);
-
-// need to get keys and figure out api
-    console.log("spotify-this-song");
+    spotify.search({type:'track', query:'Aftertaste'}, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
+//Save all arrays to variables
+//Loop through for albums
+//Loop through for artists on album
+//output Song - Artist(s) - Album - Preview URL 
+        // var songData = JSON.stringify(data);
+        console.log("--------------------------------------------ITEMS");
+        console.log(data.tracks.items[0].name);
+        console.log(data.tracks.items[0].preview_url);
+        console.log("--------------------------------------------ALBUM");
+        console.log(data.tracks.items[0].album.album_type);
+        console.log(data.tracks.items[0].album.name);
+        console.log("--------------------------------------------ARTISTS");
+        console.log(data.tracks.items[0].artists[0].name);
+        // console.log(data.tracks.items);
+        // console.log("Artist(s): " + artist);
+        // console.log("Song: " + song);
+        // console.log("Preview: " + preview);
+        // console.log("Album: " + album);       
+    });
 }
 
 function lookupValue() {
@@ -73,15 +97,15 @@ function lookupValue() {
 }
 
 function getMovie() {
-    // if no movie title was input, use Mr. Nobody
-    if (lookkupValue()=="ErrNoLookup") {
+    // if no movie title was input, use Mr. Nobody else parse input together if without quotes
+    var lookupMovieValue = "";
+    if (lookupValue()=="ErrNoLookup") {
         lookupMovieValue = "Mr. Nobody";   
     } else { 
         lookupMovieValue = lookupValue();
-    }
-    // pull back movie information
+    };
+    // pull back and output movie information
     var lookupMovie = "http://www.omdbapi.com/?t=" + lookupMovieValue + "&y=&plot=short&apikey=trilogy";
-    // &r=json
     request(lookupMovie, function(error, response, body) {
     // If the request was successful...
         if (!error && response.statusCode === 200) {
