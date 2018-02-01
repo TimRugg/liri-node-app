@@ -49,15 +49,12 @@ function getTweets(){
 
 function getSong() {
     // if no song title was input, use The Sign else parse input together if without quotes
-    var lookupSongValue = "";
-    if (lookupValue()=="ErrNoLookup") {
+    var lookupSongValue = lookupValue();
+    if (lookupSongValue =="ErrNoLookup") {
         lookupSongValue = "the sign";   
-    } else { 
-        lookupSongValue = lookupValue();
     };
     // pull back and output song information
     var spotify = new Spotify(keys.spotify); // using keys.js sends the two spotify keys to create a Spotify object
-    // spotify.search({type:'track', query:'Aftertaste'}, function(err, data) {
     spotify.search({type:'track', query:lookupSongValue}, function(err, data) {
         if (err) {
           return console.log('Error occurred: ' + err);
